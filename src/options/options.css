@@ -1,0 +1,149 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  color: #15202d;
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.2), transparent 35%),
+    linear-gradient(180deg, #eef5ff 0%, #f9fbff 100%);
+}
+
+.options-shell {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 40px 20px 56px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 128px 1fr;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.hero-icon {
+  width: 128px;
+  height: 128px;
+  border-radius: 32px;
+  box-shadow: 0 24px 48px rgba(27, 59, 104, 0.18);
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0b62da;
+}
+
+.hero h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+}
+
+.hero-copy,
+.hint,
+.status {
+  margin: 0;
+  color: #556171;
+}
+
+.card {
+  margin-bottom: 18px;
+  padding: 22px;
+  border: 1px solid rgba(21, 32, 45, 0.1);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 18px 45px rgba(19, 41, 68, 0.08);
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+.toggle,
+.field,
+.sound-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.field {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.toggle + .field,
+.field + .toggle,
+.toggle + .toggle,
+.field + .sound-summary,
+.sound-summary + .field,
+.time-grid,
+.button-row,
+.hint {
+  margin-top: 16px;
+}
+
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.button,
+select,
+input[type='time'],
+input[type='file'] {
+  padding: 10px 14px;
+  border: 1px solid rgba(21, 32, 45, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  color: inherit;
+}
+
+.button {
+  cursor: pointer;
+}
+
+.logs-output {
+  min-height: 220px;
+  margin-top: 16px;
+  padding: 14px;
+  overflow: auto;
+  border: 1px solid rgba(21, 32, 45, 0.12);
+  border-radius: 16px;
+  background: #0f1724;
+  color: #d8e6ff;
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.button-primary {
+  border-color: #0b62da;
+  background: linear-gradient(180deg, #1e7cf2 0%, #0b62da 100%);
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .time-grid {
+    grid-template-columns: 1fr;
+  }
+}

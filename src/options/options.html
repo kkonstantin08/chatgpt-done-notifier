@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ChatGPT Done Notifier Settings</title>
+    <link rel="stylesheet" href="./options.css" />
+  </head>
+  <body>
+    <main class="options-shell">
+      <section class="hero">
+        <img src="../assets/icons/icon128.png" alt="" class="hero-icon" />
+        <div>
+          <p class="eyebrow">Chrome Extension</p>
+          <h1>ChatGPT Done Notifier</h1>
+          <p class="hero-copy">
+            Conservative completion detection for ChatGPT, with desktop notifications and optional sound.
+          </p>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Behavior</h2>
+        <label class="toggle">
+          <span>Enable extension</span>
+          <input id="enabled" type="checkbox" />
+        </label>
+
+        <label class="field">
+          <span>Notification mode</span>
+          <select id="notification-mode">
+            <option value="desktop">Desktop notification only</option>
+            <option value="desktop_sound">Desktop notification + sound</option>
+          </select>
+        </label>
+
+        <label class="toggle">
+          <span>Suppress while actively viewing ChatGPT</span>
+          <input id="suppress-active" type="checkbox" />
+        </label>
+
+        <label class="toggle">
+          <span>Enable debug logging</span>
+          <input id="debug-logging-enabled" type="checkbox" />
+        </label>
+      </section>
+
+      <section class="card">
+        <h2>Quiet Hours</h2>
+        <label class="toggle">
+          <span>Enable quiet hours</span>
+          <input id="quiet-hours-enabled" type="checkbox" />
+        </label>
+
+        <div class="time-grid">
+          <label class="field">
+            <span>Start</span>
+            <input id="quiet-hours-start" type="time" />
+          </label>
+          <label class="field">
+            <span>End</span>
+            <input id="quiet-hours-end" type="time" />
+          </label>
+        </div>
+
+        <p class="hint">
+          Quiet hours suppress both desktop notifications and sound, including the built-in test actions.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Sound</h2>
+        <p class="hint">
+          The default sound is bundled with the extension. You can replace it with your own short audio file stored locally in the extension settings.
+        </p>
+
+        <div class="sound-summary">
+          <span>Current sound</span>
+          <strong id="sound-source-label">Bundled default</strong>
+        </div>
+
+        <label class="field">
+          <span>Upload custom sound</span>
+          <input id="custom-sound-file" type="file" accept=".wav,.mp3,.ogg,audio/*" />
+        </label>
+
+        <div class="button-row">
+          <button id="test-sound" type="button" class="button">Test sound</button>
+          <button id="clear-custom-sound" type="button" class="button">Use bundled sound</button>
+        </div>
+
+        <p class="hint">
+          Recommended: a short file under 1 MB for reliable storage and quick playback.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Tools</h2>
+        <div class="button-row">
+          <button id="test-notification" type="button" class="button button-primary">Test notification</button>
+          <button id="reset-settings" type="button" class="button">Reset defaults</button>
+        </div>
+        <p class="hint">
+          Monitoring works only while a ChatGPT tab remains open. Fully closing the tab ends DOM observation.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Debug Logs</h2>
+        <p class="hint">
+          Logs help diagnose why a notification was sent, suppressed, or failed. Turn on debug logging first to collect new entries.
+        </p>
+
+        <div class="button-row">
+          <button id="refresh-logs" type="button" class="button">Refresh logs</button>
+          <button id="copy-logs" type="button" class="button">Copy logs</button>
+          <button id="clear-logs" type="button" class="button">Clear logs</button>
+        </div>
+
+        <pre id="logs-output" class="logs-output">No logs loaded yet.</pre>
+      </section>
+
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </main>
+    <script src="./options.js"></script>
+  </body>
+  </html>

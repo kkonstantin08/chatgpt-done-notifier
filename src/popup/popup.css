@@ -1,0 +1,108 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 340px;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  color: #18212f;
+  background:
+    radial-gradient(circle at top right, rgba(71, 153, 255, 0.16), transparent 40%),
+    linear-gradient(180deg, #f5f9ff 0%, #ebf3ff 100%);
+}
+
+.popup-shell {
+  padding: 16px;
+}
+
+.popup-header {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.popup-header h1 {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+.popup-header p {
+  margin: 0;
+  font-size: 12px;
+  color: #556171;
+}
+
+.popup-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+}
+
+.panel {
+  margin-bottom: 12px;
+  padding: 14px;
+  border: 1px solid rgba(24, 33, 47, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 10px 30px rgba(25, 52, 87, 0.08);
+}
+
+.panel-muted {
+  background: rgba(240, 247, 255, 0.9);
+}
+
+.row,
+.field,
+.summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.row + .field,
+.field + .row,
+.row + .row {
+  margin-top: 12px;
+}
+
+.field {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.field select {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.help,
+.status {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #556171;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.button {
+  padding: 10px 12px;
+  border: 1px solid rgba(24, 33, 47, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #18212f;
+  cursor: pointer;
+}
+
+.button-primary {
+  border-color: #0b62da;
+  background: linear-gradient(180deg, #1e7cf2 0%, #0b62da 100%);
+  color: #fff;
+}
