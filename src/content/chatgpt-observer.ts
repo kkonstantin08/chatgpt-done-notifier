@@ -30,6 +30,7 @@ function stopObserver(reason: string): void {
   // Clear references to prevent memory leaks
   latestAssistantElement = null;
   stopVisibilityObservation = null;
+  latestVisibility = getVisibilitySnapshot();
 
   console.warn(`[ChatGPT Done Notifier] Observer stopped: ${reason}`);
 }

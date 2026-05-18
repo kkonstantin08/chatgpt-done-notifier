@@ -75,13 +75,24 @@ function getAssistantCandidates(root: ParentNode = document): HTMLElement[] {
     return roleMatches;
   }
 
+  // More specific fallback: only articles within main that have content structure
   return Array.from(root.querySelectorAll<HTMLElement>('main article')).filter((candidate) => {
     const normalized = normalizeText(candidate.innerText);
-    if (!normalized) {
+    if (!normalized || normalized.length < 10) {
       return false;
     }
 
-    return Boolean(candidate.querySelector('pre, code, p, ul, ol, table, [class*="markdown"], [class*="prose"]'));
+    // Must have typical assistant response structure
+    const hasContentStructure = Boolean(
+      candidate.querySelector('pre, code, p, ul, ol, table, [class*="markdown"], [class*="prose"]')
+    );
+
+    // Exclude if it looks like a user message or UI element
+    const hasUserRole = candidate.closest('[data-message-author-role="user"]');
+    const isButton = candidate.closest('button');
+    const isNav = candidate.closest('nav, header, footer, aside');
+
+    return hasContentStructure && !hasUserRole && !isButton && !isNav;
   });
 }
 
@@ -101,14 +112,18 @@ export function fingerprintAssistantTurn(element: HTMLElement | null): string | 
     return null;
   }
 
-  const trimmed = normalizedText.slice(-4000);
+  // Use both beginning and end to improve uniqueness
+  const firstPart = normalizedText.slice(0, 2000);
+  const lastPart = normalizedText.slice(-2000);
+  const combinedText = firstPart + '|' + lastPart;
+
   const codeBlocks = element.querySelectorAll('pre, code').length;
   const tables = element.querySelectorAll('table').length;
   const images = element.querySelectorAll('img').length;
   const childCount = element.childElementCount;
 
   return [
-    simpleHash(trimmed),
+    simpleHash(combinedText),
     normalizedText.length,
     codeBlocks,
     tables,
