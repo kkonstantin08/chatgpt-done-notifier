@@ -26,6 +26,11 @@ function stopObserver(reason: string): void {
   stopVisibilityObservation?.();
   stopActivePolling();
   stateMachine.dispose();
+
+  // Clear references to prevent memory leaks
+  latestAssistantElement = null;
+  stopVisibilityObservation = null;
+
   console.warn(`[ChatGPT Done Notifier] Observer stopped: ${reason}`);
 }
 

@@ -106,8 +106,12 @@ async function maybeNotifyForCompletion(tabId: number, session: RuntimeTabSessio
   await appendLog('background', 'info', 'notification_sent', `tab=${tabId} cycle=${session.cycle.cycleId} notificationId=${notificationId}`);
 
   if (settings.notificationMode === 'desktop_sound') {
-    await playNotificationSound(getSoundUrl(settings));
-    await appendLog('background', 'info', 'sound_play_requested', `tab=${tabId} source=${settings.customSoundName ?? 'bundled_default'}`);
+    try {
+      await playNotificationSound(getSoundUrl(settings));
+      await appendLog('background', 'info', 'sound_play_requested', `tab=${tabId} source=${settings.customSoundName ?? 'bundled_default'}`);
+    } catch (error: unknown) {
+      await appendLog('background', 'error', 'sound_play_failed', `tab=${tabId} error=${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
 }
 
@@ -221,8 +225,12 @@ async function handleUiMessage(message: { type: string; settings?: unknown }): P
       await showTestNotification();
       await appendLog('ui', 'info', 'test_notification_sent', 'User triggered a test notification.');
       if (settings.notificationMode === 'desktop_sound') {
-        await playNotificationSound(getSoundUrl(settings));
-        await appendLog('ui', 'info', 'test_sound_play_requested', `source=${settings.customSoundName ?? 'bundled_default'}`);
+        try {
+          await playNotificationSound(getSoundUrl(settings));
+          await appendLog('ui', 'info', 'test_sound_play_requested', `source=${settings.customSoundName ?? 'bundled_default'}`);
+        } catch (error: unknown) {
+          await appendLog('ui', 'error', 'test_sound_play_failed', `error=${error instanceof Error ? error.message : 'Unknown error'}`);
+        }
       }
 
       return {
@@ -259,8 +267,17 @@ async function handleUiMessage(message: { type: string; settings?: unknown }): P
         };
       }
 
-      await playNotificationSound(getSoundUrl(settings));
-      await appendLog('ui', 'info', 'test_sound_play_requested', `source=${settings.customSoundName ?? 'bundled_default'}`);
+      try {
+        await playNotificationSound(getSoundUrl(settings));
+        await appendLog('ui', 'info', 'test_sound_play_requested', `source=${settings.customSoundName ?? 'bundled_default'}`);
+      } catch (error: unknown) {
+        await appendLog('ui', 'error', 'test_sound_play_failed', `error=${error instanceof Error ? error.message : 'Unknown error'}`);
+        return {
+          ok: false,
+          error: error instanceof Error ? error.message : 'Failed to play sound'
+        };
+      }
+
       return {
         ok: true,
         data: {

@@ -30,7 +30,7 @@ export function isNowWithinTimeRange(start: string, end: string, date = new Date
   const endMinutes = timeStringToMinutes(end);
 
   if (startMinutes === endMinutes) {
-    return true;
+    return false;
   }
 
   if (startMinutes < endMinutes) {
