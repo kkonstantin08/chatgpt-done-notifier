@@ -40,13 +40,21 @@ export async function focusOrOpenChatGpt(
       const preferredTab = await chrome.tabs.get(preferredTabId);
       const preferredWindow = await chrome.windows.get(preferredTab.windowId);
 
-      if (preferredWindow.state === 'minimized') {
-        await chrome.windows.update(preferredWindow.id!, { state: 'normal', focused: true });
-      } else {
-        await chrome.windows.update(preferredWindow.id!, { focused: true });
+      if (!preferredWindow.id) {
+        throw new Error('Window ID is undefined');
       }
 
-      await chrome.tabs.update(preferredTab.id!, { active: true });
+      if (preferredWindow.state === 'minimized') {
+        await chrome.windows.update(preferredWindow.id, { state: 'normal', focused: true });
+      } else {
+        await chrome.windows.update(preferredWindow.id, { focused: true });
+      }
+
+      if (!preferredTab.id) {
+        throw new Error('Tab ID is undefined');
+      }
+
+      await chrome.tabs.update(preferredTab.id, { active: true });
       return;
     } catch {
       // Fall through and find another tab or open a new one.
@@ -58,10 +66,18 @@ export async function focusOrOpenChatGpt(
 
   if (fallbackTab?.id && fallbackTab.windowId !== undefined) {
     const window = await chrome.windows.get(fallbackTab.windowId);
+
+    if (!window.id) {
+      await chrome.tabs.create({
+        url: fallbackUrl ?? CHATGPT_HOME_URL
+      });
+      return;
+    }
+
     if (window.state === 'minimized') {
-      await chrome.windows.update(window.id!, { state: 'normal', focused: true });
+      await chrome.windows.update(window.id, { state: 'normal', focused: true });
     } else {
-      await chrome.windows.update(window.id!, { focused: true });
+      await chrome.windows.update(window.id, { focused: true });
     }
 
     await chrome.tabs.update(fallbackTab.id, { active: true });

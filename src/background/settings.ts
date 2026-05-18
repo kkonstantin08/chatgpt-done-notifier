@@ -6,7 +6,7 @@ export async function getSettings(): Promise<ExtensionSettings> {
   const stored = await chrome.storage.local.get(SETTINGS_STORAGE_KEY);
   const storedSettings = stored[SETTINGS_STORAGE_KEY] as Partial<ExtensionSettings> | undefined;
 
-  return {
+  const settings = {
     ...clone(DEFAULT_SETTINGS),
     ...storedSettings,
     quietHours: {
@@ -14,14 +14,32 @@ export async function getSettings(): Promise<ExtensionSettings> {
       ...(storedSettings?.quietHours ?? {})
     }
   };
+
+  // Validate duplicateCooldownMs
+  if (typeof settings.duplicateCooldownMs !== 'number' ||
+      settings.duplicateCooldownMs < 0 ||
+      !Number.isFinite(settings.duplicateCooldownMs)) {
+    settings.duplicateCooldownMs = DEFAULT_SETTINGS.duplicateCooldownMs;
+  }
+
+  return settings;
 }
 
 export async function saveSettings(settings: ExtensionSettings): Promise<ExtensionSettings> {
+  // Validate duplicateCooldownMs before saving
+  const validatedSettings = { ...settings };
+
+  if (typeof validatedSettings.duplicateCooldownMs !== 'number' ||
+      validatedSettings.duplicateCooldownMs < 0 ||
+      !Number.isFinite(validatedSettings.duplicateCooldownMs)) {
+    validatedSettings.duplicateCooldownMs = DEFAULT_SETTINGS.duplicateCooldownMs;
+  }
+
   await chrome.storage.local.set({
-    [SETTINGS_STORAGE_KEY]: settings
+    [SETTINGS_STORAGE_KEY]: validatedSettings
   });
 
-  return settings;
+  return validatedSettings;
 }
 
 export async function resetSettings(): Promise<ExtensionSettings> {

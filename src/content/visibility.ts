@@ -11,8 +11,17 @@ export function getVisibilitySnapshot(): VisibilitySnapshot {
 }
 
 export function observeVisibility(onChange: (snapshot: VisibilitySnapshot) => void): () => void {
+  let debounceTimer: number | null = null;
+
   const handler = (): void => {
-    onChange(getVisibilitySnapshot());
+    if (debounceTimer !== null) {
+      window.clearTimeout(debounceTimer);
+    }
+
+    debounceTimer = window.setTimeout(() => {
+      debounceTimer = null;
+      onChange(getVisibilitySnapshot());
+    }, 150);
   };
 
   const events: Array<[EventTarget, string]> = [
@@ -28,6 +37,11 @@ export function observeVisibility(onChange: (snapshot: VisibilitySnapshot) => vo
   }
 
   return () => {
+    if (debounceTimer !== null) {
+      window.clearTimeout(debounceTimer);
+      debounceTimer = null;
+    }
+
     for (const [target, eventName] of events) {
       target.removeEventListener(eventName, handler);
     }
