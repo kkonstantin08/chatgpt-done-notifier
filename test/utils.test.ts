@@ -68,9 +68,9 @@ describe('timeStringToMinutes', () => {
   });
 
   it('should handle invalid input gracefully', () => {
-    // Empty string results in NaN from parseInt
-    expect(Number.isNaN(timeStringToMinutes(''))).toBe(true);
-    expect(Number.isNaN(timeStringToMinutes('invalid'))).toBe(true);
+    // Now returns 0 for invalid input instead of NaN
+    expect(timeStringToMinutes('')).toBe(0);
+    expect(timeStringToMinutes('invalid')).toBe(0);
   });
 });
 

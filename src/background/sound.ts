@@ -6,6 +6,14 @@ let offscreenDocumentReady = false;
 
 async function ensureOffscreenDocument(): Promise<void> {
   const offscreenUrl = chrome.runtime.getURL(OFFSCREEN_DOCUMENT_PATH);
+
+  // Check if already creating - wait for it
+  if (creatingOffscreenDocument) {
+    await creatingOffscreenDocument;
+    return;
+  }
+
+  // Check if already exists
   const existingContexts = await chrome.runtime.getContexts({
     contextTypes: ['OFFSCREEN_DOCUMENT'],
     documentUrls: [offscreenUrl]
@@ -16,11 +24,7 @@ async function ensureOffscreenDocument(): Promise<void> {
     return;
   }
 
-  if (creatingOffscreenDocument) {
-    await creatingOffscreenDocument;
-    return;
-  }
-
+  // Create the document
   creatingOffscreenDocument = chrome.offscreen.createDocument({
     url: OFFSCREEN_DOCUMENT_PATH,
     reasons: ['AUDIO_PLAYBACK'],

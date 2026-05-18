@@ -326,12 +326,16 @@ chrome.runtime.onStartup.addListener(() => {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (isObserverStatusMessage(message)) {
-    void handleObserverStatus(message, sender);
+    void handleObserverStatus(message, sender).catch((error: unknown) => {
+      void appendLog('background', 'error', 'observer_status_handler_failed', error instanceof Error ? error.message : 'Unknown error', true);
+    });
     return;
   }
 
   if (isRuntimeLogMessage(message)) {
-    void handleRuntimeLog(message);
+    void handleRuntimeLog(message).catch((error: unknown) => {
+      console.error('[ChatGPT Done Notifier] Failed to handle runtime log:', error);
+    });
     return;
   }
 

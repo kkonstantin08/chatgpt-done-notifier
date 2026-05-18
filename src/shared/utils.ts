@@ -21,6 +21,12 @@ export function timeStringToMinutes(value: string): number {
   const [hoursText, minutesText] = value.split(':');
   const hours = Number.parseInt(hoursText ?? '0', 10);
   const minutes = Number.parseInt(minutesText ?? '0', 10);
+
+  // Return 0 if parsing failed
+  if (Number.isNaN(hours) || Number.isNaN(minutes)) {
+    return 0;
+  }
+
   return hours * 60 + minutes;
 }
 
